@@ -20,11 +20,11 @@ public class SimpleCacheProberTest {
 	 * Test method for {@link martin.michael.patrick.SimpleCacheProber#findStep(java.util.Map, int, double, DetectionStyle)}
 	 * Checks detection of a profile without a single step works.
 	 */
-	@SuppressWarnings({ "nls", "boxing" })
+	@SuppressWarnings({ "nls", "boxing" }) // NOPMD by Patrick on 23/04/12 22:05
 	@Test
 	public void testFindStepLine() {
 		
-		TreeMap<Integer, Double> dataset = new TreeMap<Integer, Double>();
+		final TreeMap<Integer, Double> dataset = new TreeMap<Integer, Double>();
 
 		// Synthesise a data set with a step over several domain points 
 		for (int i = 1 ; i < 16 ; i++) {
@@ -37,6 +37,8 @@ public class SimpleCacheProberTest {
 	}
 
 
+	static final int DOMAIN_STEP = 20;
+	
 	/**
 	 * Test method for @link martin.michael.patrick.SimpleCacheProber#findStep(java.util.Map, int, double, DetectionStyle).
 	 * Checks detection of a profile with a step works.
@@ -45,9 +47,8 @@ public class SimpleCacheProberTest {
 	@Test
 	public void testFindStepCache() {
 		
-		TreeMap<Integer, Double> dataset = new TreeMap<Integer, Double>();
+		final TreeMap<Integer, Double> dataset = new TreeMap<Integer, Double>();
 		
-		final int DOMAIN_STEP = 20;
 		// Synthesise a data set with a step function 
 		for (int i = 9 ; i < 26 ; i++) {
 			dataset.put(1 << i, (i < (DOMAIN_STEP - 1))?1.0:3.0);
@@ -66,7 +67,7 @@ public class SimpleCacheProberTest {
 	@Test
 	public void testFindCacheLine() {
 		
-		TreeMap<Integer, Double> dataset = getCacheLineTestData();
+		final TreeMap<Integer, Double> dataset = getCacheLineTestData();
 		
 		assertEquals("cache line not detected correctly",
 				     64,
@@ -81,7 +82,7 @@ public class SimpleCacheProberTest {
 	@Test
 	public void testProbeL1Cache() {
 
-		TreeMap<Integer, Double> dataset = getCacheCorei5TestData();
+		final TreeMap<Integer, Double> dataset = getCacheCorei5TestData();
 
 		assertEquals("L1 not detected correctly",
 					 64 * 1024,
@@ -97,7 +98,7 @@ public class SimpleCacheProberTest {
 	@Test
 	public void testProbeL2Cache() {
 
-		TreeMap<Integer, Double> dataset = getCacheCorei5TestData();
+		final TreeMap<Integer, Double> dataset = getCacheCorei5TestData();
 
 		assertEquals("L2 not detected correctly",
 				     4 * 1024 * 1024,
@@ -111,9 +112,9 @@ public class SimpleCacheProberTest {
 	 */
 	@Test
 	public void testProbeCacheLine() {
-		SimpleCacheProber simpleCacheProber = new SimpleCacheProber();
+		final SimpleCacheProber simpleCacheProber = new SimpleCacheProber();
 		simpleCacheProber.probeCacheLine();
-		assertEquals(64, simpleCacheProber.getCacheLine());
+		assertEquals("confirm a sensible cache line size is obtained", 64, simpleCacheProber.getCacheLine());
 	}
 
 	/**
@@ -123,7 +124,7 @@ public class SimpleCacheProberTest {
 	@SuppressWarnings({ "nls", "boxing" })
 	@Test
 	public void testProbeCacheLineMany() {
-		SimpleCacheProber simpleCacheProber = new SimpleCacheProber();
+		final SimpleCacheProber simpleCacheProber = new SimpleCacheProber();
 		for (int i =0 ; i <20 ; i++) {
 			simpleCacheProber.probeCacheLine();
 			assertEquals(String.format("iteration %d", i),
@@ -137,7 +138,7 @@ public class SimpleCacheProberTest {
 	 */
 	@SuppressWarnings("boxing")
 	private TreeMap<Integer, Double> getCacheLineTestData() {
-		TreeMap<Integer, Double> dataset = new TreeMap<Integer, Double>();
+		final TreeMap<Integer, Double> dataset = new TreeMap<Integer, Double>();
 			
 		dataset.put(1, 0.168668);
 		dataset.put(2, 0.115932);
@@ -157,7 +158,7 @@ public class SimpleCacheProberTest {
 	 */
 	@SuppressWarnings("boxing")
 	private TreeMap<Integer, Double> getCacheCorei5TestData() {
-		TreeMap<Integer, Double> dataset = new TreeMap<Integer, Double>();
+		final TreeMap<Integer, Double> dataset = new TreeMap<Integer, Double>();
 	
 		dataset.put(512, 2.847967);
 		dataset.put(1024, 2.812983);

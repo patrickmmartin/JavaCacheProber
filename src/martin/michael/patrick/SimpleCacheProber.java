@@ -24,18 +24,18 @@ public class SimpleCacheProber {
 	 * @param args
 	 *            standard arguments for a Main class - unused
 	 */
-	@SuppressWarnings({ "nls", "boxing" })
-	public static void main(String[] args) {
+	@SuppressWarnings({ "nls", "boxing" }) // NOPMD by Patrick on 23/04/12 22:02
+	public static void main(final String[] args) {
 
-		SimpleCacheProber simpleCacheProber = new SimpleCacheProber();
+		final SimpleCacheProber simpleCacheProber = new SimpleCacheProber();
 		// get an estimate of the cache line size
-		System.out.println("Starting probe of cache line");
+		System.out.println("Starting probe of cache line"); // NOPMD by Patrick on 23/04/12 22:03
 		simpleCacheProber.probeCacheLine();
 
 		// cache line size detection is generally quite reliable, but for the
 		// purposes of exposition,
 		// let's impose a sanity check
-		int cacheLineSize = simpleCacheProber._cacheLine;
+		int cacheLineSize = simpleCacheProber.cacheLine;
 
 		if (cacheLineSize < 0) {
 			System.err.println("failed to detect cache line size: assuming value of 64");
@@ -94,15 +94,15 @@ public class SimpleCacheProber {
 	/**
 	 * detected cache line
 	 */
-	private int _cacheLine = -1;
+	private int cacheLine = -1;
 	/**
 	 * detected L1 cache size
 	 */
-	private int _cacheL1 = -1;
+	private int cacheL1 = -1;
 	/**
 	 * detected L2 cache size
 	 */
-	private int _cacheL2 = -1;
+	private int cacheL2 = -1;
 
 	/**
 	 * getter for cacheLine property
@@ -110,7 +110,7 @@ public class SimpleCacheProber {
 	 * @return the detected cacheLine size in bytes
 	 */
 	public int getCacheLine() {
-		return this._cacheLine;
+		return this.cacheLine;
 	}
 
 	/**
@@ -119,7 +119,7 @@ public class SimpleCacheProber {
 	 * @return the detected cacheL1 size in bytes
 	 */
 	public int getCacheL1() {
-		return this._cacheL1;
+		return this.cacheL1;
 	}
 
 	/**
@@ -128,12 +128,12 @@ public class SimpleCacheProber {
 	 * @return the detected cacheL2 size in bytes
 	 */
 	public int getCacheL2() {
-		return this._cacheL2;
+		return this.cacheL2;
 	}
 
 	// This class is not going to be persisted
 	@SuppressWarnings("serial")
-	class SampleList extends ArrayList<Long> {
+	static class SampleList extends ArrayList<Long> {
 
 		/**
 		 * Performs the necessary tasks to ensure the getMin and getMax methods
@@ -163,21 +163,21 @@ public class SimpleCacheProber {
 
 	}
 	
-	class ReportWriter {
+	static class ReportWriter {
 
 		/**
 		 * wrapped file instance
 		 */
-		FileWriter _reportFile = null;
+		FileWriter reportFile = null;
 		
 		/**
 		 * Constructor that initialises the instance and opens or not the passed filename
 		 * @param reportFileName
 		 */
 		@SuppressWarnings("nls")
-		ReportWriter (String reportFileName) {
+		ReportWriter (final String reportFileName) {
 			try {
-				this._reportFile  = new FileWriter(reportFileName);
+				this.reportFile  = new FileWriter(reportFileName);
 			} catch (IOException e) {
 				System.err.println(String.format("WARN: output file [%s] not updated.", reportFileName));
 			}
@@ -188,10 +188,10 @@ public class SimpleCacheProber {
 		 * @param reportLine
 		 */
 		@SuppressWarnings("nls")
-		void writeReportLine( String reportLine) {
-			if (null != this._reportFile) {
+		void writeReportLine( final String reportLine) {
+			if (null != this.reportFile) {
 				try {
-					this._reportFile.write(reportLine + "\n");
+					this.reportFile.write(reportLine + "\n");
 				} catch (IOException e) {
 					// swallow this exception
 				}
@@ -203,9 +203,9 @@ public class SimpleCacheProber {
 		 */
 		void closeReport(){
 			// close and flush
-			if (null != this._reportFile)
+			if (null != this.reportFile)
 				try {
-					this._reportFile.close();
+					this.reportFile.close();
 				} catch (IOException e) {
 					// swallow exception
 				}
@@ -245,20 +245,20 @@ public class SimpleCacheProber {
 		/**
 		 * Chunk of sufficient size for probing cache line.
 		 */
-		byte[] arr = new byte[CACHE_LINE_ARRAY_SIZE];
+		final byte[] arr = new byte[CACHE_LINE_ARRAY_SIZE];
 
 		/**
 		 * Map of line loop execution times versus the probed array size.
 		 */
-		TreeMap<Integer, Double> lineTimes = new TreeMap<Integer, Double>();
+		final TreeMap<Integer, Double> lineTimes = new TreeMap<Integer, Double>();
 
-		ReportWriter reportWriter = new ReportWriter("line.csv");
+		final ReportWriter reportWriter = new ReportWriter("line.csv");
 
 		reportWriter.writeReportLine("Power,Size,Time Min,Duration Min,Duration Max");
 
 		// it's going to be in the region of 64
 		for (int pow = 2; pow < 18; pow++) {
-			int lineStride = 1 << pow;
+			final int lineStride = 1 << pow;
 			SampleList loopTimes = new SampleList();
 			for (int i = 0; i < CACHE_LINE_LOOPS; i++) {
 				loopTimes.add(testByteArray(arr, lineStride));
@@ -275,7 +275,7 @@ public class SimpleCacheProber {
 
 		reportWriter.closeReport();
 		
-		this._cacheLine = findStep(lineTimes, 1, CACHE_LINE_THRESHOLD, DetectionStyle.SoftEdge);
+		this.cacheLine = findStep(lineTimes, 1, CACHE_LINE_THRESHOLD, DetectionStyle.SoftEdge);
 
 	}
 
@@ -316,7 +316,7 @@ public class SimpleCacheProber {
 	 */
 
 	@SuppressWarnings({ "nls", "boxing" })
-	void probeCaches(int cacheLineSize) {
+	void probeCaches(final int cacheLineSize) {
 
 		// 64 MB array
 		// if running really low on memory, simply adjust maxShift
@@ -356,11 +356,11 @@ public class SimpleCacheProber {
 		reportWriter.closeReport();
 		
 		// start finding the L1 cache from a reasonable start point
-		this._cacheL1 = findStep(lineTimes, 1024, CACHE_L1_THRESHOLD);
+		this.cacheL1 = findStep(lineTimes, 1024, CACHE_L1_THRESHOLD);
 
 		// and pick up for the cache at the next point on, which avoids the
 		// noisy behaviour around the transition
-		this._cacheL2 = findStep(lineTimes, this._cacheL1 * 2, CACHE_L2_THRESHOLD);
+		this.cacheL2 = findStep(lineTimes, this.cacheL1 * 2, CACHE_L2_THRESHOLD);
 
 	}
 
@@ -392,7 +392,7 @@ public class SimpleCacheProber {
 	 *         local maximum in the 2nd differential
 	 */
 	@SuppressWarnings("boxing")
-	public int findStep(TreeMap<Integer, Double> lineTimes, int start, double threshold, DetectionStyle detectStyle) {
+	public int findStep(TreeMap<Integer, Double> lineTimes, int start, double threshold, final DetectionStyle detectStyle) {
 
 		// this Set will be sorted (as an implementation detail of the TreeMap
 		// passed in)
